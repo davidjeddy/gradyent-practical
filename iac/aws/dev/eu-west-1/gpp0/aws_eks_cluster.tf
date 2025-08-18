@@ -3,7 +3,7 @@
 #     module.vpc
 #   ]
 
-#   name     = local.cluster_name
+#   name     = local.name
 #   role_arn = aws_iam_role.cluster.arn
 #   version  = var.kubernetes_version
 #   bootstrap_self_managed_addons = var.bootstrap_self_managed_addons_enabled

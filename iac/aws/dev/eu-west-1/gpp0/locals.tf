@@ -1,6 +1,7 @@
 locals {
-  delimiter = ""
+  application = "graydent"
+  delimiter = "-"
   env = "dev"
-  name = join(local.delimiter, [var.environment, var.application, var.component, var.deployment_id])
-  region - "eu-west-1"
+  name = join(local.delimiter, [local.env, local.application, var.deployment_id])
+  region = "eu-west-1"
 }

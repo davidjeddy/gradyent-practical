@@ -24,7 +24,13 @@ I know TF has workspaces, but I feel they do not provide enough isolation. Plus 
 
 - Use AWS EKS Auto Mode. When it comes to infra my experience has been less-is-more;/ until the organization reaches such a point that the cost of labour is less than the benefits of over-optimization.
 
-- Each IAC configuration type gets its own file, makes finding things a lot easier later on.
+Each IAC configuration type gets its own file, makes finding things a lot easier later on.
+
+For simplicity, but never in actual deployments, store the state file locally. A good deployment we must store the state file remotely.
+
+Now deploy the network and IAM resources.
+
+Bring the VPC modules up to the most recent published version.
 
 ## Make It Right
 
