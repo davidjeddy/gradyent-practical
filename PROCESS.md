@@ -16,6 +16,16 @@ How do we want to handle the public facing ELB?  As part of the cluster resource
 
 Since this project is a all-include lets handle it ELB as part of the cluster resources deployment.
 
+To prevent naming collisions in the case of multiple deployments of the same resources multiple times per environment, for example multiple `dev` deployments leveraging shared resources such as VPC, S3, etc, I have gotten into the practice of using a `deployment_id` per deployed instance of the stack.
+
+I know TF has workspaces, but I feel they do not provide enough isolation. Plus they are a bit of a pain to work with in my experience.
+
+- Tag all resources using the provider
+
+- Use AWS EKS Auto Mode. When it comes to infra my experience has been less-is-more;/ until the organization reaches such a point that the cost of labour is less than the benefits of over-optimization.
+
+- Each IAC configuration type gets its own file, makes finding things a lot easier later on.
+
 ## Make It Right
 
 ## Make If Fast
