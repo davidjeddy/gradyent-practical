@@ -110,7 +110,32 @@ Nothing. Do I reach out to Gradyent at this point?
 
 Trying to read anything from inside the container via `ls`, `whoami`, `cat /proc`. All returns `OCI runtime attempted to invoke a command that was not found`.
 
+```sh
+podman top priceless_brahmagupta
+```
 
+Shows the process running, ok thats something.
+
+When trying to exec into the container using `/app` I get `2025/08/18 19:28:26 listen tcp :8080: bind: address already in use`. :|
+
+Really. The documentation is incorrect. Its not port `80` inside the container. Its `8080`. The following returns `ok` and `world` as expected:
+
+```sh
+podman run -it --rm -p 8080:8080 docker.io/gradyent/tech-interview:latest /app
+da$ curl --location --verbose 127.0.0.1:8080/
+ok
+$ curl --location --verbose 127.0.0.1:8080/hello
+world!
+* Connection #0 to host 127.0.0.1 left intact
+```
+
+That was an incorrect assumption on my part :/. :facepalm:
+
+Now with that out of the way, on to configuring the Kube resources.
+
+#### Kubernetes service, without Helm
+
+#### Kubernetes service with Helm
 
 ### Make It Right
 
