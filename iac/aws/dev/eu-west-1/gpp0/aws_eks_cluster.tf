@@ -1,43 +1,45 @@
-# resource "aws_eks_cluster" "cluster" {
-#   depends_on = [
-#     module.vpc
-#   ]
+resource "aws_eks_cluster" "cluster" {
+  depends_on = [
+    module.vpc
+  ]
 
-#   name     = local.name
-#   role_arn = aws_iam_role.cluster.arn
-#   version  = var.kubernetes_version
-#   bootstrap_self_managed_addons = var.bootstrap_self_managed_addons_enabled
+  bootstrap_self_managed_addons = false
+  name     = local.name
+  role_arn = aws_iam_role.cluster.arn
 
-#   vpc_config {
-#     subnet_ids              = module.vpc.private_subnets
-#     security_group_ids      = []
-#     endpoint_private_access = "true"
-#     endpoint_public_access  = "true"
-#   }
+  version  = "1.33"
 
-#   access_config {
-#     authentication_mode                         = "API"
-#     bootstrap_cluster_creator_admin_permissions = false
-#   }
+  vpc_config {
+    endpoint_private_access = "true"
+    endpoint_public_access  = "true"
+    security_group_ids      = []
+    subnet_ids              = module.vpc.private_subnets
+  }
 
-#   zonal_shift_config {
-#     enabled = var.zonal_shift_config
-#   }
+  access_config {
+    authentication_mode                         = "API"
+    bootstrap_cluster_creator_admin_permissions = false
+  }
 
-#   compute_config {
-#     enabled       = true
-#     node_pools    = ["general-purpose", "system"]
-#     node_role_arn = aws_iam_role.node.arn
-#   }
+  zonal_shift_config {
+    enabled = true
+  }
 
-#   kubernetes_network_config {
-#     elastic_load_balancing {
-#       enabled = true
-#     }
-#   }
+  compute_config {
+    enabled       = true
+    node_pools    = ["general-purpose", "system"]
+    node_role_arn = aws_iam_role.node.arn
+  }
 
-#   storage_config {
-#     block_storage {
-#       enabled = true
-#     }
-#   }
+  kubernetes_network_config {
+    elastic_load_balancing {
+      enabled = true
+    }
+  }
+
+  storage_config {
+    block_storage {
+      enabled = true
+    }
+  }
+}

@@ -1,5 +1,5 @@
 locals {
-  application = "graydent"
+  application = "gradyent"
   delimiter = "-"
   env = "dev"
   name = join(local.delimiter, [local.env, local.application, var.deployment_id])

@@ -28,7 +28,7 @@ Task Overview:
 
 1. Deploy an EKS cluster using Terraform.
 
-2. Create and deploy a Helm chart for the Docker image docker pull gradyent/tech-interview:latest, with the following requirements:
+2. Create and deploy a Helm chart for the Docker image `docker pull gradyent/tech-interview:latest`, with the following requirements:
 
 - Configure a readiness probe for :8080/ (returns "OK").
 
