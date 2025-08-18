@@ -135,6 +135,26 @@ Now with that out of the way, on to configuring the Kube resources.
 
 #### Kubernetes service, without Helm
 
+Add the raw Kube resources for the service, the deployment, and the ingress.
+
+- As discussed above we will use resources to deploy the ELB given the context and scope of this project.
+
+Note: Do not forget to add permissions to the IAM user used to access the cluster via `Access` in the web UI. Again, typically we would codify this access bu this is an example project.
+
+```sh
+aws eks update-kubeconfig --region eu-west-1 --name dev-gradyent-gpp0
+kubectl config set-context dev-gradyent-gpp0
+kubectl get ns
+
+cd ./srv/web-app
+kubectl apply -f ingressClass.yaml 
+kubectl apply -f ingress.yaml
+kubectl apply -f service.yaml
+kubectl apply -f deployment.yaml
+```
+
+This is a good stopping place for now. Destroying the resources to save costs and committing what we have so far.
+
 #### Kubernetes service with Helm
 
 ### Make It Right

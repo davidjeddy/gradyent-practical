@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: web-app
+  name: web-app
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web-app
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          minDomains: 2
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: web-app
+      containers:
+        - image: gradyent/tech-interview:latest
+          imagePullPolicy: Always
+          name: web-app
+          ports:
+            - containerPort: 8080
