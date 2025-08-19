@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: web-app
-  name: ingress-web-app-public
+  namespace: {{ .Chart.name }}
+  name: ingress-{{ .Chart.name }}-public
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}}]'
 spec:
   ingressClassName: eks-auto-alb
   rules:
@@ -15,6 +15,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: service-web-app
+                name: service-{{ .Chart.name }}
                 port:
-                  number: 80
+                  number: {{ .Values.sourcePort }}

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: web-app
+  name: {{ .Chart.name }}
   labels:
     team: gradyent
     owner: davidjeddy

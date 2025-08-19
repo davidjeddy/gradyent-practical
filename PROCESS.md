@@ -224,8 +224,13 @@ ok
 
 Success. Our service is running and accessible from the internet.
 
+Now time to Helm'ify the service
 
 #### Kubernetes service with Helm
+
+```sh
+cd ./srv/web-app
+helm create web-app
 
 ### Make It Right
 
