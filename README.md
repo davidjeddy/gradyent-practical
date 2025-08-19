@@ -36,24 +36,24 @@ Task Overview:
 
 Solution Requirements: The solution should address:
 
-- Scalability - DONE
-- Monitoring - DONE
-- Cost - DONE
-- Ease of use - DONE
+- Scalability
+- Monitoring
+- Cost
+- Ease of use
 
 Bonus Points for including:
 
-- CI/CD pipeline
+- CI/CD pipeline - WONT DO
 
-- Ingress configuration - IN PROGRESS
+- Ingress configuration - DONE
 
-- An architecture diagram - IN PROGRESS
+- An architecture diagram -
 
-- Security considerations- DONE
+- Security considerations -
 
-- Impress us - TODO
+- Impress us -
 
-Finally, submit your solution in a Git repository, including a README file. - TODO
+Finally, submit your solution in a Git repository, including a README file.
 
 ## Thought Process and Procedure Flow
 
@@ -73,8 +73,20 @@ A collection of errors and corrective actions within the scope of this project.
 
 ### Download
 
+Note: Requires a pre-existing AWS user/role with permission to deploy dns, network, and EKS resource.
+
 ```sh
-git clone https://gitlab.com/b5087/devops/coding-challenge/david-eddy.git
+git clone https://github.com/davidjeddy/gradyent-practical.git
+# Deploy IAC
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0
+terraform apply
+# Deploy Kubernetes service
+cd ${PROJECT_ROOT}/srv/web-app
+helm install web-app . --values ./dev/values.yaml
+# Wait for service to come ready, while we do that get the load balancer DNS
+LB_DNS=$()
+curl --location --verbose http://${LB_DNS}
+curl --location --verbose http://${LB_DNS}/hello
 ```
 
 ## Versioning
@@ -99,4 +111,4 @@ Additional labels for pre-release and build metadata are available as extensions
 - [ROADMAP](./ROADMAP.md) example from [all-contributors/all-contributors](https://github.com/all-contributors/all-contributors/blob/master/MAINTAINERS.md).
 - Based on [README Maturity Model](https://github.com/LappleApple/feedmereadmes/blob/master/README-maturity-model.md); strive for a Level 5 `Product-oriented README`.
 - [CONTRIBUTING.md](./CONTRIBUTING.md) is based on the [Ruby on Rails Contributing](https://github.com/rails/rails/blob/master/CONTRIBUTING.md) document, credit is due to them.
-- [LICENSE](./LICENSE.md) sources from:
+- [LICENSE](./LICENSE.md) sources from.
