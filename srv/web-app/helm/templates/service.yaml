@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: {{ .Chart.name }}
-  name: service-{{ .Chart.name }}
+  namespace: {{ .Chart.Name }}
+  name: service-{{ .Chart.Name }}
 spec:
   ports:
     - port: {{ .Values.sourcePort }}
       targetPort: {{ .Values.targetPort }}
       protocol: TCP
   selector:
-    app.kubernetes.io/name: app-{{ .Chart.name }}
+    app.kubernetes.io/name: app-{{ .Chart.Name }}

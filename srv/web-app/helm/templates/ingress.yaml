@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: {{ .Chart.name }}
-  name: ingress-{{ .Chart.name }}-public
+  namespace: {{ .Chart.Name }}
+  name: ingress-{{ .Chart.Name }}-public
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}}]'
@@ -15,6 +15,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: service-{{ .Chart.name }}
+                name: service-{{ .Chart.Name }}
                 port:
                   number: {{ .Values.sourcePort }}

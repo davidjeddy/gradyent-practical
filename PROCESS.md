@@ -231,6 +231,46 @@ Now time to Helm'ify the service
 ```sh
 cd ./srv/web-app
 helm create web-app
+```
+
+Replace the generated Kube configs with ours and deploy.
+
+```sh
+$ helm install web-app .
+
+$ kubectl get all -n web-app
+NAME                                     READY   STATUS    RESTARTS   AGE
+pod/deployment-web-app-545587d9f-gkp24   0/1     Pending   0          29s
+pod/deployment-web-app-545587d9f-hx75v   0/1     Pending   0          29s
+pod/deployment-web-app-545587d9f-x4s24   0/1     Pending   0          29s
+
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/service-web-app   ClusterIP   172.20.250.51   <none>        80/TCP    29s
+
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/deployment-web-app   0/3     3            0           29s
+
+NAME                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/deployment-web-app-545587d9f   3         3         0       29s
+
+$ helm status web-app
+NAME: web-app
+LAST DEPLOYED: Tue Aug 19 21:58:40 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+
+$ helm history web-app
+REVISION	UPDATED                 	STATUS  	CHART        	APP VERSION	DESCRIPTION     
+1       	Tue Aug 19 21:58:40 2025	deployed	web-app-0.1.0	0.0.1      	Install complete
+
+```
+
+Nice, replace the repeated and configurable values with `Chart` and `values` values.
+
+Update deployment, success.
+
+Now lets mode the values.yaml into a path that matches the IAC pathing a bit better. This way it is easy to map a Helm deployment to a specific IAC resource group.
 
 ### Make It Right
 

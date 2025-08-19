@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: {{ .Chart.name }}
-  name: deployment-{{ .Chart.name }}
+  namespace: {{ .Chart.Name }}
+  name: deployment-{{ .Chart.Name }}
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: app-{{ .Chart.name }}
-  replicas: {{ .Values.replicaCount }}
+      app.kubernetes.io/name: app-{{ .Chart.Name }}
+  replicas: 3
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: app-{{ .Chart.name }}
+        app.kubernetes.io/name: app-{{ .Chart.Name }}
     spec:
       topologySpreadConstraints:
         - maxSkew: 1
@@ -20,22 +20,22 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: app-{{ .Chart.name }}
+              app.kubernetes.io/name: app-{{ .Chart.Name }}
       containers:
-        - image: {{ .Values.image }}
+        - image: gradyent/tech-interview:latest
           imagePullPolicy: Always
-          name: {{ .Chart.name }}
+          name: app-{{ .Chart.Name }}
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: {{ .Values.targetPort }}
           livenessProbe:
             httpGet:
               path: /hello
-              port: {{ .Values.containerPort }}
+              port: {{ .Values.targetPort }}
             initialDelaySeconds: 3
             periodSeconds: 3
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.containerPort }}
+              port: {{ .Values.targetPort }}
             initialDelaySeconds: 5
             periodSeconds: 5

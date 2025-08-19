@@ -1,0 +1,5 @@
+# Helm values can be highly configurable and in-depth; this is just a simple example.
+targetPort: 8080
+image: gradyent/tech-interview:latest
+replicaCount: 3
+sourcePort: 80
