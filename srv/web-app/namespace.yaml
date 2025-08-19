@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web-app
+  labels:
+    team: gradyent
+    owner: davidjeddy
+    project: practical

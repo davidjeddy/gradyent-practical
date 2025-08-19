@@ -4,7 +4,9 @@ Typically I separate projects based on the boundary of responsibility. IAC is th
 
 Oh, and typically we would not commit binary files to a Git project without using LFS. But its a couple hour long practical project so I do not see the need, lets just keep it in-tree.
 
-## Workflow#
+## Workflow
+
+### Session 1
 
 ### Make It Work
 
@@ -155,6 +157,31 @@ kubectl apply -f deployment.yaml
 
 This is a good stopping place for now. Destroying the resources to save costs and committing what we have so far.
 
+### Session 2
+
+AWS web UI is inconsistent when assigning cluster permissions. You have to press `add permission` for each permission set :/. #dumb. Also dumb UI is the `X` to close the success message ends up being right over the `delete` button on some views.
+
+Like yesterday the folders under `./srv` would be isolated projects. Ideally sharing a pipeline with source, build, test, tag, publish, deploy stages.
+
+```sh
+cd ./src/web-app
+kube apply -f .
+```
+
+Ok deployment to default namespace works, now destroy move it to a non-default namespace. Lets use namespace `web-app`. Apply the `namespace.yaml` first, then all the other resources
+
+```sh
+kube destroy -f .
+# edit namespace.yaml
+kube apply -f namespace.yaml
+kube apply -f .
+```
+
+Wait for the ELB to provision...
+
+
+
+
 #### Kubernetes service with Helm
 
 ### Make It Right
@@ -167,13 +194,15 @@ This is a good stopping place for now. Destroying the resources to save costs an
 
 Services within the cluster can be configured to auto-scale based on a number of resource usage parameters. CPU, MEM, connection count, etc. CPU and MEM can be handled by the cluster natively, for other scaling triggers custom controllers or even CloudWatch could be leveraged.
 
+For this project we leveraged EKS Auto Mode which includes automatic horizontal and vertical scaling. While it is not as controllable as manually configured scaling it is much less effort intensive to operate.
+
 - Monitoring
 
 CloudWatch Metrics and Logs is the easy answer here, but also the Prometheus Controller is also a good option. Coupled with an alerting system to inform operators when a service is operating near or past allowable boundaries.
 
 - Cost
 
-AWS Budget to keep accounts within an allowable spend. To help with this scaling-to-zero any internal accounts during off hours.
+Deploy Budget Alerts to keep accounts spend within an allowable range. We can decommission resources during non-office hours and reducing non-production cluster scaling to a minimal level.
 
 - Ease of use
 
@@ -197,3 +226,7 @@ Helm ...
 - Security Considerations
 
 - Impress us
+
+EKS Auto Mode
+
+- Reduced maintance and operational overhead

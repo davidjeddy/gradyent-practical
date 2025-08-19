@@ -1,11 +1,12 @@
 resource "aws_iam_role" "cluster" {
-  name = "eks-test-cluster-role"
-
   assume_role_policy = data.aws_iam_policy_document.cluster_role_assume_role_policy.json
+  name = join(local.delimiter, [local.name, "cluster"])
 }
 
 resource "aws_iam_role" "node" {
-  name = "eks-auto-node-example"
+  name = join(local.delimiter, [local.name, "node"])
+
+  # TODO Move policy to data resource type
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

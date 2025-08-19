@@ -22,8 +22,20 @@ spec:
             matchLabels:
               app.kubernetes.io/name: web-app
       containers:
-        - image: gradyent/tech-interview:latest
+        - image: docker.io/gradyent/tech-interview:latest
           imagePullPolicy: Always
           name: web-app
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /hello
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
