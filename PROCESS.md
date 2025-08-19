@@ -179,7 +179,50 @@ kube apply -f .
 
 Wait for the ELB to provision...
 
+```sh
+$ kubectl get all -n web-app
+NAME                                     READY   STATUS    RESTARTS   AGE
+pod/deployment-web-app-545587d9f-7t4z7   1/1     Running   0          4m29s
+pod/deployment-web-app-545587d9f-cmvg5   1/1     Running   0          4m29s
+pod/deployment-web-app-545587d9f-wggsr   1/1     Running   0          4m29s
 
+NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+service/service-web-app   ClusterIP   172.20.158.242   <none>        80/TCP    4m35s
+
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/deployment-web-app   3/3     3            3           4m29s
+
+NAME                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/deployment-web-app-545587d9f   3         3         3       4m29s
+```
+
+and 
+
+```sh
+curl --location --verbose http://k8s-webapp-ingressw-72770ac2d5-2065808880.eu-west-1.elb.amazonaws.com/
+* Host k8s-webapp-ingressw-72770ac2d5-2065808880.eu-west-1.elb.amazonaws.com:80 was resolved.
+* IPv6: (none)
+* IPv4: 54.171.44.59, 18.203.13.22, 54.171.31.221
+*   Trying 54.171.44.59:80...
+* Connected to k8s-webapp-ingressw-72770ac2d5-2065808880.eu-west-1.elb.amazonaws.com (54.171.44.59) port 80
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: k8s-webapp-ingressw-72770ac2d5-2065808880.eu-west-1.elb.amazonaws.com
+> User-Agent: curl/8.11.1
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Date: Tue, 19 Aug 2025 19:25:40 GMT
+< Content-Type: text/plain; charset=utf-8
+< Content-Length: 2
+< Connection: keep-alive
+< 
+* Connection #0 to host k8s-webapp-ingressw-72770ac2d5-2065808880.eu-west-1.elb.amazonaws.com left intact
+ok
+```
+
+Success. Our service is running and accessible from the internet.
 
 
 #### Kubernetes service with Helm

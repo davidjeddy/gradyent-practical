@@ -1,5 +1,9 @@
 # TODO
 
+EKS Access for IAM user via API keys
+
+- user/API keys are not the best option here. Cross account assumed role is best. But due to scope of project I decided the effort required is beyond the goal of the project.
+
 Sub-domain the web-app
 
 TLS on the public facing subdomain/s
