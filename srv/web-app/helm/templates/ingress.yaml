@@ -1,14 +1,13 @@
+{{- if not (quote .Values.acmTlsArn | empty) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: {{ .Chart.Name }}
   name: ingress-{{ .Chart.Name }}-public
   annotations:
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}}]'
-    # alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}, "HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: "[{\"HTTP\": {{ .Values.sourcePort }}, \"HTTPS\": 443}]"
     alb.ingress.kubernetes.io/ssl-redirect: "443"
-    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/target-type: "ip"
 spec:
   ingressClassName: eks-auto-alb
   rules:
@@ -21,3 +20,25 @@ spec:
                 name: service-{{ .Chart.Name }}
                 port:
                   number: {{ .Values.sourcePort }}
+{{- else }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: {{ .Chart.Name }}
+  name: ingress-{{ .Chart.Name }}-public
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: "[{\"HTTP\": {{ .Values.sourcePort }}}]"
+    alb.ingress.kubernetes.io/target-type: "ip"
+spec:
+  ingressClassName: eks-auto-alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service-{{ .Chart.Name }}
+                port:
+                  number: {{ .Values.sourcePort }}
+{{- end }}

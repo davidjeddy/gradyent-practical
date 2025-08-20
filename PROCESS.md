@@ -277,8 +277,14 @@ Now lets mode the values.yaml into a path that matches the IAC pathing a bit bet
 Now that we have a functional service in a cluster lets add a bit of flare:
 
 - Pretty sub-domain w/ TLS
-- Auto add EKSClusterPermission to existing IAM user
-- Kubernetes Dashboard
+
+Split the sub-domain and TLS generation (and validation) into a separate deployment module. This decouples the public ingress from the cluster configuration. Limiting the blast radius should something go wrong.
+
+Now we have the TLS cert and subdomain...
+
+.. configure Helm to optionally accept the TLS ARN
+
+Nice. Got that working. Now traffic is redirected to TLS on 443 when requesting the web-app
 
 ### Make It Right
 

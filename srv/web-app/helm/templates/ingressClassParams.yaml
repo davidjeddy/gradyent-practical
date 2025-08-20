@@ -5,5 +5,7 @@ metadata:
 spec:
   scheme: internet-facing
   ipAddressType: ipv4
+  {{- if not (quote .Values.acmTlsArn | empty) }}
   certificateARNs:
     - {{ .Values.acmTlsArn }}
+  {{- end -}}

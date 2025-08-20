@@ -44,7 +44,7 @@ For this solution I went with the deployment of an ALB via Kubernetes resources 
 
 - Impress us
 
-  - Pretty DNS with TLS - IN PROGRESS
+  - (optional, both in IAC and Helm deployments) Pretty DNS with TLS - DONE
   - Kubernetes Dashboard - TODO
   - 2048 web game as a second service - TODO
 
