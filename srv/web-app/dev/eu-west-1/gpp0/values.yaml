@@ -1,5 +1,6 @@
 # Helm values can be highly configurable and in-depth; this is just a simple example.
-targetPort: 8080
+acmTlsArn: arn:aws:acm:eu-west-1:530589290119:certificate/57d0dd78-1da1-4a32-92b8-9014e7ac0f6d
 image: gradyent/tech-interview:latest
 replicaCount: 3
 sourcePort: 80
+targetPort: 8080

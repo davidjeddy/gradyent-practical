@@ -4,8 +4,11 @@ metadata:
   namespace: {{ .Chart.Name }}
   name: ingress-{{ .Chart.Name }}-public
   annotations:
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}}]'
+    # alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}, "HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": {{ .Values.sourcePort }}}]'
 spec:
   ingressClassName: eks-auto-alb
   rules:

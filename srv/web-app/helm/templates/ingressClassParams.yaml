@@ -4,3 +4,6 @@ metadata:
   name: eks-auto-alb
 spec:
   scheme: internet-facing
+  ipAddressType: ipv4
+  certificateARNs:
+    - {{ .Values.acmTlsArn }}
