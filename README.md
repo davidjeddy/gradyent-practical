@@ -26,13 +26,13 @@ technical interview.
 
 Task Overview:
 
-1. Deploy an EKS cluster using Terraform - DONE
+1. Deploy an EKS cluster using Terraform
 
-2. Create and deploy a Helm chart for the Docker image `docker pull gradyent/tech-interview:latest`, with the following requirements - DONE
+2. Create and deploy a Helm chart for the Docker image `docker pull gradyent/tech-interview:latest`, with the following requirements
 
-- Configure a readiness probe for :8080/ (returns "OK") - DONE
+- Configure a readiness probe for :8080/ (returns "OK")
 
-- Configure a liveness probe for :8080/hello (returns "world") - DONE
+- Configure a liveness probe for :8080/hello (returns "world")
 
 Solution Requirements: The solution should address:
 
@@ -43,15 +43,15 @@ Solution Requirements: The solution should address:
 
 Bonus Points for including:
 
-- CI/CD pipeline - WONT DO
+- CI/CD pipeline
 
-- Ingress configuration - DONE
+- Ingress configuration
 
-- An architecture diagram -
+- An architecture diagram
 
-- Security considerations -
+- Security considerations
 
-- Impress us -
+- Impress us
 
 Finally, submit your solution in a Git repository, including a README file.
 

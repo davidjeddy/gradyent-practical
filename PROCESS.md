@@ -272,49 +272,14 @@ Update deployment, success.
 
 Now lets mode the values.yaml into a path that matches the IAC pathing a bit better. This way it is easy to map a Helm deployment to a specific IAC resource group.
 
+### Session 3
+
+Now that we have a functional service in a cluster lets add a bit of flare:
+
+- Pretty sub-domain w/ TLS
+- Auto add EKSClusterPermission to existing IAM user
+- Kubernetes Dashboard
+
 ### Make It Right
 
 ### Make If Fast
-
-## Additional Deliverables
-
-- Scalability
-
-Services within the cluster can be configured to auto-scale based on a number of resource usage parameters. CPU, MEM, connection count, etc. CPU and MEM can be handled by the cluster natively, for other scaling triggers custom controllers or even CloudWatch could be leveraged.
-
-For this project we leveraged EKS Auto Mode which includes automatic horizontal and vertical scaling. While it is not as controllable as manually configured scaling it is much less effort intensive to operate.
-
-- Monitoring
-
-CloudWatch Metrics and Logs is the easy answer here, but also the Prometheus Controller is also a good option. Coupled with an alerting system to inform operators when a service is operating near or past allowable boundaries.
-
-- Cost
-
-Deploy Budget Alerts to keep accounts spend within an allowable range. We can decommission resources during non-office hours and reducing non-production cluster scaling to a minimal level.
-
-- Ease of use
-
-Project toolchain install via `./libs/bash/install.sh` (Fedora 42 only, sorry)
-
-to install the ingress and service is a matter of executing the following
-
-```sh
-
-Helm ...
-```
-
-## Bonus Items
-
-- CI/CD pipeline
-
-- Ingress configuration
-
-- An architecture diagram
-
-- Security Considerations
-
-- Impress us
-
-EKS Auto Mode
-
-- Reduced maintance and operational overhead
