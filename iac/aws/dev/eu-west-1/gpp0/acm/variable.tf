@@ -34,7 +34,7 @@ variable "web_app_sub_domain" {
 }
 
 variable "web_app_elb_arn" {
-  default = "arn:aws:elasticloadbalancing:eu-west-1:530589290119:loadbalancer/app/k8s-webapp-ingressw-72770ac2d5/a45c03c038487cf3"
+  default = "arn:aws:elasticloadbalancing:eu-west-1:530589290119:loadbalancer/app/k8s-webapp-ingressw-72770ac2d5/dee2887c69909610"
   description = "(required) ARN of the ELB used to front the service"
   type = string
 

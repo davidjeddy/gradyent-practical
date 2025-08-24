@@ -20,13 +20,13 @@ EKS Auto Mode manages the workload nodes compute, storage, and networking. For s
 
 Many solutions exist to address monitoring as knowing how the cluster is operating is paramount to successfully operating a cluster. The very basic is the Kubernetes Dashboard. If the monitoring solution should be hosted in the cluster the Prometheus Operator is a good option. If the desire is to keep the monitoring outside the cluster AWS CloudWatch Metrics and Logs can also be leveraged very easily. - DONE
 
-- Cost - TODO
+- Cost
 
-- Ease of use - TODO
+Costing is always a concern when operating applications. In non-prod deployments effort should be made to scale down resources during times they are not used. Using a Kubernetes cluster as the runtime schedules can be created to scale services down during non-business hours. Additionally budget alerts should be created to triggered if breached. Finally, as part of any applications lifecycle regular reviews should be completed to validate expenses.
 
-  - Deploy cluster and network resources
-  - Deploy TLS resources (optional)
-  - Deploy Services via Helm chart
+- Ease of use
+
+Process is detailed in the README.md - DONE
 
 ## Nice to Haves
 
@@ -36,17 +36,21 @@ Leverage an existing CI/CD system such as GitLab, Jenkins, GitHub Actions to exe
 
 - Ingress configuration
 
-For this solution I went with the deployment of an ALB via Kubernetes resources as part of the web-app services
+For this solution I went with the deployment of an ALB via Kubernetes resources as part of the web-app services.
 
-- An architecture diagram - TODO
+- An architecture diagram
 
-- Security considerations - TODO
+Using im2nguyen/rover to automatically generate IAC diagrams. - DONE
+
+- Security considerations
+
+Principle of Least privilege, only load balancers, CDNs, and API gateways should be in public subnets, CloudTrail to watch for abnormal interactions with the AWS account. Additionally Kubernetes cluster RBAC permissions should also be audited regularly.
 
 - Impress us
 
   - (optional, both in IAC and Helm deployments) Pretty DNS with TLS - DONE
-  - Kubernetes Dashboard - TODO
-  - 2048 web game as a second service - TODO
+  - Kubernetes Dashboard - DONE
+  - 2048 web game as a second service - NEH
 
 Solution in a Git repository - DONE
 

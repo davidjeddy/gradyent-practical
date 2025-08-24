@@ -8,8 +8,12 @@
   - [Thought Process and Procedure Flow](#thought-process-and-procedure-flow)
   - [RoadMap](#roadmap)
   - [Runbook](#runbook)
+  - [Requirements](#requirements)
   - [Usage](#usage)
-    - [Download](#download)
+  - [Usage - Optional](#usage---optional)
+    - [Public DNS + TLS](#public-dns--tls)
+    - [Visuals Generation](#visuals-generation)
+    - [Kubernetes Dashboard](#kubernetes-dashboard)
   - [Versioning](#versioning)
   - [Contributors](#contributors)
   - [Additional Information](#additional-information)
@@ -69,25 +73,66 @@ A collection of errors and corrective actions within the scope of this project.
 
 [./RUNBOOK](./RUNBOOK.md)
 
+## Requirements
+
+- AWS account with administrative permissions
+- AWS CLI tool
+- Kubernetes CLI tool
+- Helm CLI tool
+- (optional) AWS Route53 Hosted Zone
+
 ## Usage
-
-### Download
-
-Note: Requires a pre-existing AWS user/role with permission to deploy dns, network, and EKS resource.
 
 ```sh
 git clone https://github.com/davidjeddy/gradyent-practical.git
+cd gradyent-practical
+export PROJECT_ROOT="$(pwd)"
+
 # Deploy IAC
-cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/web-app
 terraform apply
+
 # Deploy Kubernetes service
-cd ${PROJECT_ROOT}/srv/web-app
-helm install web-app . --values ./dev/values.yaml
+helm install web-app ./helm/web-app --values ./srv/web-app/dev/eu-west-1/gpp0/values.yaml 
+
 # Wait for service to come ready, while we do that get the load balancer DNS
-LB_DNS=$()
+export LB_DNS="$(kubectl get Ingress/ingress-web-app-public -n web-app -o "jsonpath={.status.loadBalancer.ingress[0].hostname}")"
+
 curl --location --verbose http://${LB_DNS}
 curl --location --verbose http://${LB_DNS}/hello
 ```
+
+## Usage - Optional
+
+### Public DNS + TLS
+
+```sh
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/acm
+# Edit variables
+vi variables.tf
+# Provide values for root_domain and web_app_elb_arn. Save and exit.
+# Deploy IAC
+terraform apply
+```
+
+### Visuals Generation
+
+```sh
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/web-app
+terraform plan -out plan.out
+terraform show -json plan.out > plan.json
+podman run --rm -it -p 9000:9000 -v $(pwd)/plan.json:/src/plan.json:z im2nguyen/rover:latest -planJSONPath=plan.json
+```
+
+### Kubernetes Dashboard
+
+```sh
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+```
+
+Open browser and visit `https://localhost:8443` and follow the displayed command.
 
 ## Versioning
 
@@ -108,7 +153,5 @@ Additional labels for pre-release and build metadata are available as extensions
 ## Additional Information
 
 - [Changelog](https://github.com/olivierlacan/keep-a-changelog)
-- [ROADMAP](./ROADMAP.md) example from [all-contributors/all-contributors](https://github.com/all-contributors/all-contributors/blob/master/MAINTAINERS.md).
 - Based on [README Maturity Model](https://github.com/LappleApple/feedmereadmes/blob/master/README-maturity-model.md); strive for a Level 5 `Product-oriented README`.
-- [CONTRIBUTING.md](./CONTRIBUTING.md) is based on the [Ruby on Rails Contributing](https://github.com/rails/rails/blob/master/CONTRIBUTING.md) document, credit is due to them.
 - [LICENSE](./LICENSE.md) sources from.

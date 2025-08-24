@@ -6,11 +6,9 @@ Oh, and typically we would not commit binary files to a Git project without usin
 
 ## Workflow
 
-### Session 1
+## Make It Work
 
-### Make It Work
-
-#### Preflight
+### Preflight
 
 Ok, with that out of the way lets get our toolchain installed. Copy in `./libs/bash/install.sh` to leverage previous effort towards this project.
 
@@ -34,7 +32,7 @@ Each IAC configuration type gets its own file, makes finding things a lot easier
 
 For simplicity, but never in actual deployments, store the state file locally. A good deployment we must store the state file remotely.
 
-#### IAM, VPC, EKS
+### IAM, VPC, EKS
 
 Now deploy the network and IAM resources.
 
@@ -44,7 +42,7 @@ To cover the requirement of High Availability (HA) within the scope of the proje
 
 At this point we have a VPC w/ 3 public and 3 private subnets and a Kubernetes cluster deployed
 
-#### Container Service
+### Container Service
 
 Lets pull the image locally and run it to understand the output.
 
@@ -135,7 +133,7 @@ That was an incorrect assumption on my part :/. :facepalm:
 
 Now with that out of the way, on to configuring the Kube resources.
 
-#### Kubernetes service, without Helm
+### Kubernetes service, without Helm
 
 Add the raw Kube resources for the service, the deployment, and the ingress.
 
@@ -226,7 +224,7 @@ Success. Our service is running and accessible from the internet.
 
 Now time to Helm'ify the service
 
-#### Kubernetes service with Helm
+### Kubernetes service with Helm
 
 ```sh
 cd ./srv/web-app
@@ -272,7 +270,7 @@ Update deployment, success.
 
 Now lets mode the values.yaml into a path that matches the IAC pathing a bit better. This way it is easy to map a Helm deployment to a specific IAC resource group.
 
-### Session 3
+## Session 3
 
 Now that we have a functional service in a cluster lets add a bit of flare:
 
@@ -286,6 +284,10 @@ Now we have the TLS cert and subdomain...
 
 Nice. Got that working. Now traffic is redirected to TLS on 443 when requesting the web-app
 
-### Make It Right
+## Session 4
 
-### Make If Fast
+Make a arch. diagram from IAC configuration
+
+Add kube dashboard
+
+done

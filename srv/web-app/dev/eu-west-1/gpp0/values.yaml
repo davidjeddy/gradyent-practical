@@ -5,5 +5,5 @@ replicaCount: 3
 sourcePort: 80
 targetPort: 8080
 
-# Optional
-acmTlsArn: "arn:aws:acm:eu-west-1:530589290119:certificate/57d0dd78-1da1-4a32-92b8-9014e7ac0f6d"
+# Optional - uncomment and provide value from IAC ACM output
+# acmTlsArn: "arn:aws:acm:eu-west-1:530589290119:certificate/57d0dd78-1da1-4a32-92b8-9014e7ac0f6d"
