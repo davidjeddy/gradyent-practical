@@ -3,7 +3,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      app        = "shared"
+      app        = "gradyent_practical"
       deployment = var.deployment_id
       env        = local.env
       owner      = "david_j_eddy"

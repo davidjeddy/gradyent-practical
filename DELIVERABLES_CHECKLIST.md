@@ -14,7 +14,7 @@
 
 - Scalability
 
-EKS Auto Mode manages the workload nodes compute, storage, and networking. For simple scaling activities  HPA (Horizontal Pod Autoscaling) resource can be deployed into the cluster. This would require the deployment of a metrics service. - DONE
+EKS Auto Mode manages the workload nodes compute, storage, and networking. For simple scaling activities  HPA (Horizontal Pod Autoscaling) resource can be deployed into the cluster. This would require the deployment of a metrics service. A good best-practice is to deploy pods across all available zones per region. - DONE
 
 - Monitoring
 

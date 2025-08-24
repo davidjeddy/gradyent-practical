@@ -6,14 +6,13 @@
   - [Table of Contents](#table-of-contents)
   - [Objective](#objective)
   - [Thought Process and Procedure Flow](#thought-process-and-procedure-flow)
-  - [RoadMap](#roadmap)
-  - [Runbook](#runbook)
   - [Requirements](#requirements)
   - [Usage](#usage)
   - [Usage - Optional](#usage---optional)
     - [Public DNS + TLS](#public-dns--tls)
-    - [Visuals Generation](#visuals-generation)
+    - [Generate Infra Diagram](#generate-infra-diagram)
     - [Kubernetes Dashboard](#kubernetes-dashboard)
+  - [Tear-down (Delete)](#tear-down-delete)
   - [Versioning](#versioning)
   - [Contributors](#contributors)
   - [Additional Information](#additional-information)
@@ -63,16 +62,6 @@ Finally, submit your solution in a Git repository, including a README file.
 
 Follow along as we think and execute the process to satisfy the practices requirements via the [./PROCESS.md](./PROCESS.md).
 
-## RoadMap
-
-Upcoming planned project changes and feature adds.
-
-## Runbook
-
-A collection of errors and corrective actions within the scope of this project.
-
-[./RUNBOOK](./RUNBOOK.md)
-
 ## Requirements
 
 - AWS account with administrative permissions
@@ -84,23 +73,55 @@ A collection of errors and corrective actions within the scope of this project.
 ## Usage
 
 ```sh
+declare KUBE_CLUSTER_NAME
+declare LB_DNS
+declare PROJECT_ROOT
+
 git clone https://github.com/davidjeddy/gradyent-practical.git
 cd gradyent-practical
 export PROJECT_ROOT="$(pwd)"
+echo $PROJECT_ROOT
 
 # Deploy IAC
-cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/web-app
-terraform apply
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/core
+terraform apply # this can take some time while the cluster is deployed
+export KUBE_CLUSTER_NAME=$(terraform output --json | jq -rM ".cluster_name.value")
+echo $KUBE_CLUSTER_NAME
 
-# Deploy Kubernetes service
-helm install web-app ./helm/web-app --values ./srv/web-app/dev/eu-west-1/gpp0/values.yaml 
+# Take note of the cluster name
 
-# Wait for service to come ready, while we do that get the load balancer DNS
+# Set context for kubectl
+cd ${PROJECT_ROOT}
+aws eks update-kubeconfig --region eu-west-1 --name "${KUBE_CLUSTER_NAME}"
+kubectl cluster-info
+kubectl get all -A
+```
+
+![cluster deployed](./imgs/00-cluster-deployed.png)
+
+To ensure the user will have permissions to deploy resources into the cluster. In a deployment the cluster permission assignment would be determined based on some central identity and permission assignments. But here, we just assign it manually.
+
+![cluster deployed](./imgs/01-cluster-permissions.png)
+
+```sh
+# Deploy Kubernetes service - Here `gpp0` is the unique deployment_id identifier
+cd ${PROJECT_ROOT}
+helm install web-app ./helm/web-app --values ./srv/web-app/dev/eu-west-1/gpp0/values.yaml
+```
+
+![service deployed](./imgs/02-web-app-deployed.png)
+
+```sh
+# Get the load balancer DNS
 export LB_DNS="$(kubectl get Ingress/ingress-web-app-public -n web-app -o "jsonpath={.status.loadBalancer.ingress[0].hostname}")"
+echo $LB_DNS
 
+# Once the service has completed deployment it should be reachable from the public internet
 curl --location --verbose http://${LB_DNS}
 curl --location --verbose http://${LB_DNS}/hello
 ```
+
+![curl response](./imgs/03-curl-response.png)
 
 ## Usage - Optional
 
@@ -108,17 +129,36 @@ curl --location --verbose http://${LB_DNS}/hello
 
 ```sh
 cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/acm
-# Edit variables
+# Edit root_domain variable value
 vi variables.tf
-# Provide values for root_domain and web_app_elb_arn. Save and exit.
 # Deploy IAC
 terraform apply
 ```
 
-### Visuals Generation
+Take note of the output values.
+
+Edit the Helm values.yaml providing the TLS certificate ARN, then upgrade.
 
 ```sh
-cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/web-app
+cd ${PROJECT_ROOT}
+helm upgrade web-app ./helm/web-app --values ./srv/web-app/dev/eu-west-1/gpp0/values.yaml
+```
+
+![TLS Cert validated](./imgs/04-tls-cert-validated.png)
+
+Once the Helm upgrade is completed, and the TLS certificate has validated, visit the pretty DNS using TLS encryption.
+
+```sh
+curl --location --verbose https://${HTTPS_DNS_FROM_ACM_MODULE}
+curl --location --verbose https://${HTTPS_DNS_FROM_ACM_MODULE}/hello
+```
+
+![https curl response](./imgs/05-https-curl-response.png)
+
+### Generate Infra Diagram
+
+```sh
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/core # or any other Terraform module directory
 terraform plan -out plan.out
 terraform show -json plan.out > plan.json
 podman run --rm -it -p 9000:9000 -v $(pwd)/plan.json:/src/plan.json:z im2nguyen/rover:latest -planJSONPath=plan.json
@@ -133,6 +173,16 @@ kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy
 ```
 
 Open browser and visit `https://localhost:8443` and follow the displayed command.
+
+## Tear-down (Delete)
+
+```sh
+helm uninstall web-app
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/acm
+terraform destroy --auto-approve
+cd ${PROJECT_ROOT}/iac/aws/dev/eu-west-1/gpp0/core
+terraform destroy --auto-approve
+```
 
 ## Versioning
 

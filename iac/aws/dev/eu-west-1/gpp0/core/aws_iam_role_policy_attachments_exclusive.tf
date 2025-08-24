@@ -1,5 +1,5 @@
-resource "aws_iam_role_policy_attachments_exclusive" "cluster" {
-  role_name = aws_iam_role.cluster.name
+resource "aws_iam_role_policy_attachments_exclusive" "this" {
+  role_name = aws_iam_role.this.name
   policy_arns = [
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
     "arn:aws:iam::aws:policy/AmazonEKSComputePolicy",

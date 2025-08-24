@@ -22,7 +22,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: app-{{ .Chart.Name }}
       containers:
-        - image: gradyent/tech-interview:latest
+        - image: {{ .Values.image }}
           imagePullPolicy: Always
           name: app-{{ .Chart.Name }}
           ports:

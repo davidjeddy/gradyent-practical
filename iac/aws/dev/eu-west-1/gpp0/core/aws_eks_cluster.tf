@@ -1,12 +1,12 @@
-resource "aws_eks_cluster" "cluster" {
+resource "aws_eks_cluster" "this" {
   depends_on = [
     module.vpc
   ]
 
   name     = local.name
-  role_arn = aws_iam_role.cluster.arn
+  role_arn = aws_iam_role.this.arn
 
-  version  = "1.33"
+  version = "1.33"
 
   vpc_config {
     endpoint_private_access = "true"
